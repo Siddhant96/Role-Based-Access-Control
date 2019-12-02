@@ -1,0 +1,56 @@
+<html>
+  <head>
+    <title>
+      Delete Resource
+    </title>
+
+    <link rel='stylesheet' type='text/css' href='./mystyle.css' />
+  </head>
+  <body>
+      <h1>ROLE BASED ACCESS CONTROL</h1>
+      <div id = 'aform' class = 'aform'>
+        <form method="POST">
+        Resource: 
+        <select required id="resources" name="resources"></select>
+        <br />
+         
+        <input class='submit' type="submit" value='Delete Resource' />
+        
+        </form>
+      </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src = './myscript.js'></script> 
+    <script src= './injectButtons.js'></script> 
+    <script>
+        $(document).ready(()=>{
+            $("form").submit((event)=>{
+            event.preventDefault();
+            const resource_name = $('#resources').val();
+            var post_url = '/delete_resource';
+            form_data = { 
+                          resource_name
+                        };
+            console.log(form_data);
+            $.post(post_url, form_data, ( response )=> {
+              if(response.length == 0)
+                {alert('No response recieved ');return false;}
+              
+              //console.log(response);
+              // response will be either true or false
+              if(response == true)
+                alert('Resource deleted');
+              else if(response ==false)
+                alert('Resource already deleted.');
+              else
+                alert(response);
+             
+                
+            }); 
+          });
+
+      });// end of document.ready
+    </script>
+  </body>
+
+  
+</html>

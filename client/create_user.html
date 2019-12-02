@@ -1,0 +1,65 @@
+<html>
+  <head>
+    <title>Role Based Access Control</title>
+
+    <link rel='stylesheet' type='text/css' href='./mystyle.css' />
+
+  </head>
+
+  <body>
+    <h1>ROLE BASED ACCESS CONTROL</h1>
+    
+      <div id = 'aform' class = 'aform'>
+          <form method="POST">
+              User Name: 
+              <input required type = 'text' id='username'>
+              <br />
+              Password:
+              <input required type='password' id = 'password'>
+              <br />
+              <input class='submit' type="submit" value='Create User'/>
+              </form>
+              <br/>
+              <button id='to_add_role' onclick="location.href='add_role.html'">Define Role</button>
+              <br/>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+            <script src= './injectButtons.js'></script>
+            <script>
+              $(document).ready(()=>{
+                $('#to_add_role').hide(); // hide button initially
+
+                $("form").submit((event)=>{
+                event.preventDefault();
+                const user_name = $('#username').val();
+                const password = $('#password').val();
+                console.log(user_name);
+                var post_url = '/create_user';
+                form_data = { user_name,
+                              password
+                            };
+                console.log(form_data);
+                
+                $.post(post_url, form_data, ( response )=> {
+                  if(response.length == 0)
+                    {alert('No response recieved from add_user_role route');return false;}
+                  
+                  console.log(response);
+                  // response will be either true or false
+                  if(response == true)
+                    {alert('New user created');
+                    $('#to_add_role').show();
+                }
+                  else
+                    alert('User already exists.');
+                
+                    
+                }); // end of $(post)
+
+              }); // end of submit
+
+              }); // end of document.ready
+
+              
+            </script>
+
+              

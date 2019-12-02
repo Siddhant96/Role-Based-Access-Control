@@ -1,0 +1,118 @@
+<html>
+  <head>
+    <title>Role Based Access Control</title>
+
+    <link rel='stylesheet' type='text/css' href='./mystyle.css' />
+
+  </head>
+
+  <body >
+    <h1>ROLE BASED ACCESS CONTROL</h1>
+    
+    <div id='maindiv'>
+      <div id = 'aform' class = 'aform'>
+      <form id="access_form"  method="POST">
+        User:
+        
+        <select required id="users" name="user_id" onchange=getRoles(this.value)> </select>
+        
+        <br />
+        Roles:
+        <select required id="roles" name="role_name"></select>
+        <br />
+        Resources:
+        <select required id="resources" name="resource_name">
+          
+        </select>
+        <br />
+        Actions:
+        <select required id="actions" name="action">
+          <option value = ''>Select</option>
+          <option value = 'can_read'>Read</option>
+          <option value = 'can_write'>Write</option>
+          <option value = 'can_delete'>Delete</option>
+        </select>
+        <br />
+        <input class='submit' type="submit" value="Check Access" />
+        
+        
+      </form>
+      <!--
+      <button onclick = "location.href='create_user.html'">Add New User</button>
+      <button onclick = "location.href='create_role.html'">Add New Role</button>
+      <button id = 'add_role' onclick="location.href='add_role.html'">Add User's Role</button>
+      <button id = 'remove_role' onclick="location.href='remove_role.html'">Remove User's Role</button>
+      <button onclick = "location.href='edit_access.html'">Update Access</button>
+      <button onclick = "location.href='create_resource.html'">Add New Resource</button>
+      -->
+      Functions:
+      <select id='functions'>
+        <option value = ''>Select</option>
+        <option  value='edit_access.html'>Update Access to resource</option>
+        <option  value='create_user.html'>Add New User</option>
+        <option  value='create_role.html'>Add New Role</option>
+        <option  value='create_resource.html'>Add New Resource</option>
+        <option  value='add_role.html'>Add User's Role</option>
+        <option  value='remove_role.html'>Remove User from Role</option>
+        <option value = 'delete_user.html'>Delete User</option>
+        <option value = 'delete_role.html'>Delete Role</option>
+        <option  value='delete_resource.html'>Delete Resource</option>
+
+      </select>
+    </div> <!-- end of div with div id aform and class aform-->
+
+    <br/> <br/>
+    
+    
+    
+  </div> <!-- end of main div-->
+  </body>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src = './myscript.js'></script>
+<script>
+
+$(window).bind("pageshow", function(event) {
+    if (event.originalEvent.persisted) {
+        window.location.reload(); 
+    }
+});
+  $(document).ready(()=>{
+
+  $('select#functions').on('change',()=>{
+    const redirectPage = $('select#functions').val();
+    location.href = redirectPage;
+  });
+  $("#access_form").submit((event)=>{
+  event.preventDefault();
+  //console.log(event);
+  const roleName =  $('#roles').val();
+  const resourceName = $('#resources').val();
+  const actionName = $('#actions').val();
+  var post_url = '/check_access';
+  form_data = { role_name:roleName,
+                resource_name :resourceName,
+                action: actionName
+              };
+  //console.log(form_data);
+  
+  $.post(post_url, form_data, ( response )=> {
+    if(response.length == 0)
+      {alert('Resource not defined for this role.');return false;}
+    response = Object.values(response[0])[0]
+    //console.log(response);
+    if(response == 'y')
+      alert('Access granted');
+    else if(response == 'n')
+      alert('Access Denied');
+    else
+      alert('an error occured');
+     
+  });
+  
+  });
+});
+ 
+</script>
+
+</html>

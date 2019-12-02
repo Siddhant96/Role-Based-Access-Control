@@ -1,0 +1,66 @@
+<html>
+  <head>
+    <title>Add New Resource</title>
+
+    <link rel='stylesheet' type='text/css' href='./mystyle.css' />
+
+  </head>
+
+  <body>
+    <h1>ROLE BASED ACCESS CONTROL</h1>
+    
+      <div id = 'aform' class = 'aform'>
+          <form method="POST">
+              Resource Name: 
+              <input required type = 'text' id='resourcename'>
+              <br />
+              
+              <input class='submit' type="submit" value='Create Resource' />
+              
+            </form>
+            <br/>
+              <button id='to_edit_access' onclick="location.href='edit_access.html'">Define Access for new Resource</button>
+              <br/>
+            <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+            <script src= './injectButtons.js'></script>
+            <script>
+              $(document).ready(()=>{
+                $('#to_edit_access').hide();
+
+                $("form").submit((event)=>{
+                event.preventDefault();
+                const resource_name = $('#resourcename').val().toLowerCase();
+            
+                console.log(resource_name);
+                var post_url = '/create_resource';
+                form_data = { resource_name,
+                            
+                            };
+                //console.log(form_data);
+                
+                $.post(post_url, form_data, ( response )=> {
+                  if(response.length == 0)
+                    {alert('No response recieved from create_resource route');return false;}
+                  
+                  //console.log(response);
+                  // response will be either true or false
+                  if(response == true)
+                    {alert('New resource created');
+                    $('#to_edit_access').show();
+                }
+                  else if(response == false)
+                    alert('This resource already exists.');
+                  else
+                    alert('could not create resource: '+response);
+                
+                    
+                }); // end of $(post)
+                
+              }); // end of submit
+
+              }); // end of document.ready
+
+              
+            </script>
+
+              

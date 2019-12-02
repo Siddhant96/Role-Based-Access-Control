@@ -1,0 +1,58 @@
+<html>
+  <head>
+    <title>
+      Add Roles
+    </title>
+
+    <link rel='stylesheet' type='text/css' href='./mystyle.css' />
+  </head>
+  <body>
+      <h1>ROLE BASED ACCESS CONTROL</h1>
+      <div id = 'aform' class = 'aform'>
+        <form method="POST">
+        User: 
+        <select required id="users" name="user_id"></select>
+        <br />
+        Roles:
+        <select required id="all_roles" name="role_name"></select>
+        <br />
+         
+        <input class='submit' type="submit" value='Add Role' />
+        
+        </form>
+      </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src = './myscript.js'></script> 
+    <script src= './injectButtons.js'></script> 
+    <script>
+        $(document).ready(()=>{
+            $("form").submit((event)=>{
+            event.preventDefault();
+            const roleName =  $('#all_roles').val();
+            const userid = $('#users').val();
+            var post_url = '/add_user_role';
+            form_data = { role_name:roleName,
+                          user_id:userid
+                        };
+            console.log(form_data);
+            $.post(post_url, form_data, ( response )=> {
+              if(response.length == 0)
+                {alert('No response recieved from add_user_role route');return false;}
+              
+              console.log(response);
+              // response will be either true or false
+              if(response == true)
+                alert('New role added to this user');
+              else
+                alert('Role already assigned to user');
+             
+                
+            }); 
+          });
+
+      });// end of document.ready
+    </script>
+  </body>
+
+  
+</html>
